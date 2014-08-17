@@ -1,0 +1,69 @@
+grammar Sexp
+  rule program
+    (expr whitespace?)* <Program> 
+  end
+
+  rule expr
+    list / float / integer / string / identifier
+  end
+
+  rule integer
+    ('+' / '-')? [0-9]+ <IntegerLiteral>
+  end
+  
+  rule float
+    ('+' / '-')? [0-9]+ (('.' [0-9]+) / ('e' [0-9]+)) <FloatLiteral>
+  end
+  
+  rule string
+    '"' ([^"\\] / "\\" . )* '"' <StringLiteral>
+  end
+  
+  rule list
+  	'(' (expr whitespace?)* ')' <ListLiteral>
+  end
+
+  rule letter
+  	[a-z]
+  end
+
+  rule special_initial
+  	'!' / '$' / '%' / '*' / '/' / ':' / '<' / '=' / '>' / '?' /  '^' / '_' / '~' 
+  end
+
+  rule digit
+  	[0-9]
+  end
+
+  rule special_subsequent
+  	'+'/ '-' /'.' /'@'
+  end
+
+  rule subsequent
+  	initial / digit / special_subsequent
+  end
+
+  rule initial
+  	letter / special_initial
+  end
+
+  rule peculiar_identifier
+  	'+' / '-' / '...'
+  end
+
+  rule identifier
+    ((initial subsequent*) / peculiar_identifier)
+  end
+  
+  rule space
+    [\s]+
+  end
+
+  rule newline
+    [\n]+
+  end
+
+  rule whitespace
+    space / newline
+  end
+end
